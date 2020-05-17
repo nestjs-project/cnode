@@ -5,7 +5,6 @@ import * as ejsMate from 'ejs-mate';
 import * as loaderConnect from 'loader-connect';
 
 import { AppModule } from './app.module';
-import { Configuration } from './config';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -28,6 +27,7 @@ async function bootstrap() {
   // 配置视图引擎
   app.set('view engine', 'html');
 
-  await app.listen(Configuration.getEnv('PORT'));
+  // await app.listen(Configuration.getEnv('PORT'));
+  await app.listen(3000);
 }
 bootstrap();
