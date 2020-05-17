@@ -25,7 +25,10 @@
     "@nestjs/core": "^7.0.0",
     "@nestjs/platform-express": "^7.0.0",
     "dotenv": "^8.2.0",
+    "ejs-mate": "^3.0.0",
     "joi": "^14.3.1",
+    "loader-builder": "^2.7.0",
+    "loader-connect": "^1.0.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4"
