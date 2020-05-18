@@ -9,16 +9,19 @@ export class ConfigValidate {
         .valid(['development', 'production', 'test'])
         .default('development'),
       PORT: Joi.number().default(3000),
-      HOST: Joi.string().default('localhost'),
+      HOST: Joi.string().default('127.0.0.1'),
+      // system
       SUPER_ADMIN: Joi.string().empty('').default('super_admin'),
       STATIC_HOST: Joi.string().empty('').default(''),
       MINI_ASSETS: Joi.boolean().default(false),
       SESSION_SECRET: Joi.string().required(),
       AUTH_COOKIE_NAME: Joi.string().required(),
+      // 开发上传的src 生成上传dist
+      UPLOAD_LOCATION: Joi.string(),
       // github配置验证
       GITHUB_CLIENT_ID: Joi.string().required(),
       GITHUB_CLIENT_SECRET: Joi.string().required(),
-      GITHUB_CALLBACK_URL: Joi.string().required(),
+      // GITHUB_CALLBACK_URL: Joi.string().required(),
       // 七牛配置验证
       QN_ACCESS_KEY: Joi.string().empty('').default(''),
       QN_SECRET_KEY: Joi.string().empty('').default(''),
@@ -35,6 +38,11 @@ export class ConfigValidate {
       REDIS_PASSWORD: Joi.string().empty('').default(''),
       REDIS_DB: Joi.number().default(0),
       // mongodb配置验证
+      MONGO_HOST: Joi.string().hostname().required(),	
+      MONGO_PORT: Joi.string().required(),	
+      MONGO_USER: Joi.string().required(),	
+      MONGO_PASS: Joi.string().required(),	
+      MONGO_DBS: Joi.string().required(),	
       MONGODB_URI: Joi.string().required(),
     });
 

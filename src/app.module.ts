@@ -6,19 +6,21 @@ import { AppService } from './app.service';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config';
 import { UserModule } from './shared/mongodb/user/user.module';
+import { CoreModule } from './core/core.module'
 
 @Module({
   imports: [
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-          uri: configService.get('env.MONGODB_URI'),
+          uri: configService.get('MONGODB_URI'),
           useNewUrlParser: true,
       }),
       inject: [ConfigService],
     }),
     ConfigModule,
-    UserModule
+    UserModule,
+    CoreModule
   ],
   controllers: [AppController],
   providers: [AppService],
