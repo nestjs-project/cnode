@@ -4,14 +4,18 @@ import { UserService } from './shared/mongodb/user';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService, private readonly userService: UserService) {}
+  constructor(
+    private readonly appService: AppService, 
+    private readonly userService: UserService
+  ) {}
 
   @Get()
-  @Render('index')
+  // @Render('index')
   async root () {
     // const docs = await this.userService.findAll({});
-    return {
-      // data: docs
-    }
+    // return {
+    //   // data: docs
+    // }
+    return 'hello world';
   }
 }
