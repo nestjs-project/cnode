@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { ConfigModule, EnvConfig } from '../config';
+import { ConfigModule, EnvConfig, ConfigService } from '../config';
 import { ConfigValidate } from './config.validate';
-import { ConfigService } from '../config';
-import { MailerService } from './mailer/mailer.service';
 import { MailerModule, SMTPTransportOptions } from './mailer';
 
 @Module({
@@ -36,9 +34,7 @@ import { MailerModule, SMTPTransportOptions } from './mailer';
       },
       inject: [ConfigService],
     }),
-    MailerModule,
   ],
-  providers: [MailerService],
 })
 export class CoreModule {
 }
