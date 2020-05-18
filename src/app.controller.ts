@@ -1,6 +1,6 @@
 import { Controller, Get, Render } from '@nestjs/common';
 import { AppService } from './app.service';
-import { UserService, User } from './shared/mongodb/user';
+import { UserService } from './shared/mongodb/user';
 
 @Controller()
 export class AppController {
