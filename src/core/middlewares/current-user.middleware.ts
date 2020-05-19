@@ -1,10 +1,11 @@
-import { Injectable, NestMiddleware, Request, Response, Next } from '@nestjs/common';
+import { Injectable, NestMiddleware } from '@nestjs/common';
+import { TRequest, TResponse, TNext } from '../../shared';
 
 @Injectable()
 export class CurrentUserMiddleware implements NestMiddleware {
-  use(req, res, next) {
+  use(req: TRequest, res: TResponse, next: TNext) {
     res.locals.current_user = null;
-    const { user } = req;
+    const { user } = req as any;
     if (!user) {
       return next();
     }

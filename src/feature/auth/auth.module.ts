@@ -2,10 +2,7 @@ import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { SharedModule } from '../../shared';
-import { LocalStrategy } from './passport/local.strategy';
-import { AuthSerializer } from './passport/auth.serializer';
-import { GithubStrategy } from './passport/github.strategy';
-
+import { LocalStrategy, AuthSerializer, GithubStrategy } from './passport';
 @Module({
   imports: [SharedModule],
   providers: [

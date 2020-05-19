@@ -1,7 +1,9 @@
 import { Strategy } from 'passport-github';
 import { PassportStrategy } from '@nestjs/passport';
+
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '../../../config';
+import { ConfigService } from '../../../core';
+import { GithubConfig } from '../../../config';
 
 export interface GitHubProfile {
     id: string;
@@ -52,15 +54,17 @@ export interface GitHubProfile {
 export class GithubStrategy extends PassportStrategy(Strategy) {
     constructor(private readonly config: ConfigService) {
         super({
-            clientID: config.get('GITHUB_CLIENT_ID'),
-            clientSecret: config.get('GITHUB_CLIENT_SECRET'),
-            callbackURL: `${config.get('HOST')}:${config.get('PORT')}/github/callback`,
+            ...config.get<GithubConfig>('github'),
         });
     }
 
-    // tslint:disable-next-line:ban-types
-    async validate(accessToken, refreshToken, profile: GitHubProfile, done: Function) {
-        console.log('GithubStrategy validate', accessToken, refreshToken, profile);
+     // tslint:disable-next-line:ban-types
+     async validate(
+        accessToken: string,
+        refreshToken: string,
+        profile: GitHubProfile,
+        done: (error: null, data: GitHubProfile) => void,
+    ) {
         profile.accessToken = accessToken;
         done(null, profile);
     }

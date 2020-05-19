@@ -13,26 +13,24 @@ import * as passport from 'passport';
 import * as flash from 'connect-flash';
 
 import { AppModule } from './app.module';
-import { ConfigService } from './config';
-import { getRedisConfig } from './tools';
-import { HttpExceptionFilter } from './core/filters';
+import { HttpExceptionFilter, ConfigService } from './core';
 import { TRequest, TResponse, TNext } from './shared';
+import { RedisConfig, ExpressConfig } from './config';
 
 async function bootstrap() {
-  // 根目录 nest-cnode
-  const rootDir = join(__dirname, '..');
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   
   // 不知道这个初始化有什么用，先注释
   // 初始化
   //  app.init();
 
-  // 获取配置
-  const config: ConfigService<any> = app.get(ConfigService);
+  // 根目录 nest-cnode
+  const rootDir = ConfigService.root();
+  const expressConfig = ConfigService.get<ExpressConfig>('express');
 
   // 注意：这个要在express.static之前调用，loader2.0之后要使用loader-connect
   // 自动转换less为css
-  if (config.isDevelopment) {
+  if (expressConfig.isDevelopment()) {
     app.use(loaderConnect.less(rootDir));
   }
 
@@ -49,8 +47,8 @@ async function bootstrap() {
   
   // 链接Redis
   const RedisStore = connectRedis(expressSession);
-  const secret = config.get('SESSION_SECRET');
-  const redisClient = redis.createClient(getRedisConfig(config));
+  const secret = expressConfig.secret;
+  const redisClient = redis.createClient(expressConfig);
   redisClient.unref()
   redisClient.on('error', console.log)
 
@@ -93,8 +91,7 @@ async function bootstrap() {
   // 注册全局http异常过滤器
   app.useGlobalFilters(new HttpExceptionFilter());
 
-  // await app.listen(Configuration.getEnv('PORT'));
-  await app.listen(3000);
+  await app.listen(expressConfig.port, expressConfig.host);
 }
 
 bootstrap();
