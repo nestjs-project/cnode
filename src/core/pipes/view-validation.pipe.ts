@@ -1,10 +1,9 @@
 import { Injectable, Optional, ArgumentMetadata, PipeTransform } from '@nestjs/common';
 import * as classTransformer from 'class-transformer';
-import * as classValidator from 'class-validator';
 import { ValidatorOptions } from '@nestjs/common/interfaces/external/validator-options.interface';
 
 import { isNil } from 'lodash';
-import { ValidationError } from 'class-validator';
+import { ValidationError, validate } from 'class-validator';
 import { VALIDATOR_FILTER } from '../constants/validator-filter.constants';
 import { ValidatorFilterContext } from '../decorators';
 
@@ -42,7 +41,7 @@ export class ViewValidationPipe implements PipeTransform<any> {
             metatype,
             this.toEmptyIfNil(value),
         );
-        const errors = await classValidator.validate(entity, this.validatorOptions);
+        const errors = await validate(entity, this.validatorOptions);
         if (errors.length > 0) {
             return validationErrorMessage(errors);
         }

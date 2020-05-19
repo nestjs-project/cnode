@@ -1,3 +1,4 @@
-export * from './mongodb';
 export * from './shared.module';
-export * from './services'
+export * from './mongodb';
+export * from './services';
+export * from './interfaces';

@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { PassportModule } from '@nestjs/passport';
 
 import { ConfigModule, EnvConfig, ConfigService } from '../config';
 import { ConfigValidate } from './config.validate';
@@ -7,6 +8,9 @@ import { MailerModule, SMTPTransportOptions } from './mailer';
 
 @Module({
   imports: [
+    PassportModule.register({
+      session: false,
+    }),
     ConfigModule.forRoot<EnvConfig>(null, ConfigValidate.validateInput),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
