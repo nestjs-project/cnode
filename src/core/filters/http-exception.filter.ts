@@ -13,10 +13,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
         const request: Request = ctx.getRequest();
         const status = exception.getStatus();
         switch (status) {
-            case HttpStatus.BAD_REQUEST: // 如果错误码 400
-                const render = validationErrorMessage(exception.message.message);
-                response.render(render.view, render.locals);
-                break;
+            // case HttpStatus.BAD_REQUEST: // 如果错误码 400
+            //     const render = validationErrorMessage(exception.message.message);
+            //     response.render(render.view, render.locals);
+            //     break;
             default:
                 console.log(exception.message);
                 response
