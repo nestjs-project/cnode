@@ -14,6 +14,7 @@ import { AppModule } from './app.module';
 import { ConfigService } from './config';
 import { getRedisConfig } from './tools';
 import { HttpExceptionFilter } from './core/filters';
+import { Request, Response, NextFunction } from 'express';
 
 async function bootstrap() {
   // 根目录 nest-cnode
@@ -61,8 +62,8 @@ async function bootstrap() {
   // 防止跨站请求伪造
   app.use(csurf({ cookie: true }));
   // 设置变量 csrf 保存csrfToken值
-  app.use((req, res, next) => {
-    res.locals.csrf = req.csrfToken ? req.csrfToken() : '';
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    res.locals.csrf = (req as any).csrfToken ? (req as any).csrfToken() : '';
     next();
   });
 
