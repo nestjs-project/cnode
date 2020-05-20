@@ -1,9 +1,7 @@
 import { Module } from '@nestjs/common';
-import { MongodbModule } from './mongodb';
-import { ServicesModule } from './services'
-
+import { ServicesModule } from './services/services.module';
 @Module({
-  imports: [MongodbModule, ServicesModule],
-  exports: [MongodbModule, ServicesModule],
+    imports: [ServicesModule],
+    exports: [ServicesModule],
 })
-export class SharedModule {}
+export class SharedModule { }

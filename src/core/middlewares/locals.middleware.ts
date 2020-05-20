@@ -1,16 +1,14 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import * as loader from 'loader';
-import { ConfigService, EnvConfig } from '../../core';
-import { APP_CONFIG } from '../constants';
-import { TRequest, TResponse, TNext } from '../../shared';
+import { ConfigService } from '@nestjs/config';
+import { Request, Response, NextFunction } from 'express';
 
 @Injectable()
 export class LocalsMiddleware implements NestMiddleware {
-  constructor(private readonly configService: ConfigService) {}
-
-  use(req: TRequest, res: TResponse, next: TNext) {
+  constructor(private readonly configService: ConfigService) { }
+  use(req: Request, res: Response, next: NextFunction) {
     let assets = {};
-    if (this.configService.get('env.MINI_ASSETS')) {
+    if (this.configService.get<boolean>('environment.mini_assets')) {
       try {
         assets = require('../../../assets.json');
       } catch (e) {
@@ -21,9 +19,8 @@ export class LocalsMiddleware implements NestMiddleware {
         throw e;
       }
     }
-
     // 应用配置
-    res.locals.config = this.configService.get('app');
+    res.locals.config = this.configService.get('application');
     // 加载文件
     res.locals.Loader = loader;
     // 静态资源

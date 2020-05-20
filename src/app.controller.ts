@@ -1,21 +1,18 @@
-import { Controller, Get, Render } from '@nestjs/common';
+import { Controller, Get, Render, Res } from '@nestjs/common';
+
 import { AppService } from './app.service';
-// import { UserService } from './shared/mongodb/user';
+import { Request, Response, NextFunction } from 'express';
+import { ViewsPath } from 'src/core/enums';
 
 @Controller()
 export class AppController {
   constructor(
     private readonly appService: AppService, 
-    // private readonly userService: UserService
   ) {}
 
   @Get()
-  // @Render('index')
-  async root () {
-    // const docs = await this.userService.findAll({});
-    // return {
-    //   // data: docs
-    // }
-    return 'hello world';
+  @Render('index')
+  async getHello () {
+    return {}
   }
 }

@@ -1,41 +1,37 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
-import { resolve } from 'path';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MailerModule } from '@nestjs-modules/mailer';
 
-import { ConfigModule, EnvConfig, ConfigService } from '../core';
-import { ConfigValidate } from './config.validate';
-import { MailerModule, SMTPTransportOptions } from './mailer';
-import { MailConfig } from '../config';
+import validationSchema from './config/env-schema';
+import loadConfig from './config/load-config';
 
 @Module({
   imports: [
-    PassportModule.register({
-      session: false,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      expandVariables: true,
+      envFilePath: `${process.env.NODE_ENV || 'development'}.env`,
+      load: loadConfig,
+      validationSchema,
     }),
-    ConfigModule
-    .resolveRootPath(resolve(__dirname, '../..'))
-    .resolveEnvValidator(new ConfigValidate())
-    .forRoot(
-      resolve(__dirname, '..', 'config', '**', '!(*.d).{ts,js}'),
-      {
-        path: `${process.env.NODE_ENV || 'development'}.env`,
-      }
-    ),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        uri: configService.get('env.MONGODB_URI'),
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.get<string>('database.url'),
         useNewUrlParser: true,
+        useUnifiedTopology: true,
         useCreateIndex: true,
       }),
       inject: [ConfigService],
     }),
-    MailerModule.forRootAsync<SMTPTransportOptions>({
+    PassportModule.register({
+      session: false,
+    }),
+    MailerModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => {
-        return configService.get<MailConfig>('mail');
-      },
+      useFactory: (configService: ConfigService) => configService.get('mailer'),
       inject: [ConfigService],
     }),
   ],
