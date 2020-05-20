@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { User } from './user.interface';
 
 @Injectable()
-export class UserService extends BaseService<User> {
+export class UserDbService extends BaseService<User> {
   constructor(
     @InjectModel('User') private readonly userModel: Model<User>,
   ) {

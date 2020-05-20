@@ -3,7 +3,7 @@ import { hashSync, compareSync } from 'bcryptjs';
 import { isEmail, matches, isByteLength } from 'class-validator';
 import * as utility from 'utility';
 
-import { UserService, MailService } from '../../shared';
+import { UserDbService, MailService } from '../../shared';
 import { RegisterDto, AccountDto } from './dto';
 import { APP_CONFIG, ConfigService } from '../../core';
 import { GitHubProfile } from './passport';
@@ -21,7 +21,7 @@ export class AuthService {
     private readonly logger = new Logger(AuthService.name, true);
     private readonly secret: string = this.config.get('express.secret');
     constructor(
-        private readonly userService: UserService,
+        private readonly userDbService: UserDbService,
         private readonly config: ConfigService,
         private readonly mailService: MailService,
     ) { }
@@ -29,7 +29,7 @@ export class AuthService {
     async register(register: RegisterDto) {
         const { loginname, email } = register;
         // 检查用户是否存在，查询登录名和邮箱
-        const exist = await this.userService.count({
+        const exist = await this.userDbService.count({
             $or: [
                 { loginname },
                 { email },
@@ -47,7 +47,7 @@ export class AuthService {
         const passhash = hashSync(register.pass, 10);
         // 保存用户到数据库
         try {
-            await this.userService.create({ loginname, email, pass: passhash });
+            await this.userDbService.create({ loginname, email, pass: passhash });
 
             const token = encryptMD5(email + passhash + this.secret);
 
@@ -62,7 +62,7 @@ export class AuthService {
 
     /** 激活账户 */
     async activeAccount({ name, key }: AccountDto) {
-        const user = await this.userService.findOne({
+        const user = await this.userDbService.findOne({
             loginname: name,
         });
         // 检查用户是否存在
@@ -111,9 +111,9 @@ export class AuthService {
         const getUser = (name: string) => {
             // 如果输入账号里面有@，表示是邮箱
             if (name.indexOf('@') > 0) {
-                return this.userService.getUserByMail(name);
+                return this.userDbService.getUserByMail(name);
             }
-            return this.userService.getUserByLoginName(name);
+            return this.userDbService.getUserByLoginName(name);
         };
         const user = await getUser(username);
         // 检查用户是否存在
@@ -144,11 +144,11 @@ export class AuthService {
         // 获取用户的邮箱
         const email = profile.emails && profile.emails[0] && profile.emails[0].value;
         // 根据 githubId 查找用户
-        let existUser = await this.userService.getUserByGithubId(profile.id);
+        let existUser = await this.userDbService.getUserByGithubId(profile.id);
 
         // 用户不存在则创建
         if (!existUser) {
-            existUser = new this.userService.getMode();
+            existUser = new this.userDbService.getMode();
             existUser.githubId = profile.id;
             existUser.active = true;
             existUser.accessToken = profile.accessToken;
