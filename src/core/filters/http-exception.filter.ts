@@ -26,7 +26,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
             //     response.redirect('/login');
             //     break;
             default:
-                console.log(exception.message);
+                console.log('http-exception.filter error:',exception.message);
                 response
                     .status(status)
                     .json({

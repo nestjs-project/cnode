@@ -13,7 +13,7 @@ export class ConfigModule {
         ConfigService.resolveEnvValidator(validator);
         return this;
     }
-    static forRoot(glob: string, options: ConfigOptions): DynamicModule {
+    static forRoot(glob: string, options): DynamicModule { // ConfigOptions options的类型此时报错，暂时去掉
         return {
             module: ConfigModule,
             providers: [

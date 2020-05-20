@@ -27,6 +27,7 @@ import { MailConfig } from '../config';
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get('env.MONGODB_URI'),
         useNewUrlParser: true,
+        useCreateIndex: true,
       }),
       inject: [ConfigService],
     }),

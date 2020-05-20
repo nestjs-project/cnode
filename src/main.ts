@@ -26,6 +26,7 @@ async function bootstrap() {
 
   // 根目录 nest-cnode
   const rootDir = ConfigService.root();
+
   const expressConfig = ConfigService.get<ExpressConfig>('express');
 
   // 注意：这个要在express.static之前调用，loader2.0之后要使用loader-connect
@@ -48,9 +49,10 @@ async function bootstrap() {
   // 链接Redis
   const RedisStore = connectRedis(expressSession);
   const secret = expressConfig.secret;
-  const redisClient = redis.createClient(expressConfig);
+  const redisConfig = ConfigService.get<RedisConfig>('redis');
+  const redisClient = redis.createClient(redisConfig);
   redisClient.unref()
-  redisClient.on('error', console.log)
+  redisClient.on('error', console.error)
 
   // 注册session中间件
   app.use(expressSession({
