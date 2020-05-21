@@ -381,7 +381,7 @@ export abstract class BaseRepository<T extends BaseModel> {
      * @param {QueryFindOneAndUpdateOptions} [options={ new: true }]
      * @returns {QueryItem<T>}
      */
-    public update(id: string, update: Partial<T>, options: QueryFindOneAndUpdateOptions = { new: true }): QueryItem<T> {
+    public update(id: string, update, options: QueryFindOneAndUpdateOptions = { new: true }): QueryItem<T> {
         return this.model.findByIdAndUpdate(BaseRepository.toObjectId(id), update, options);
     }
 
