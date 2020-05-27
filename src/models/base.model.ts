@@ -22,7 +22,7 @@ export abstract class BaseModel {
 
     static get schema(): Schema {
         return buildSchema(this as AnyType, {
-            timestamps: {
+            timestamps: { // timestamps启用映射，创建时间和更新时间自动更新
                 createdAt: 'created_at',
                 updatedAt: 'updated_at',
             },

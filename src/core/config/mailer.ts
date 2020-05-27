@@ -17,6 +17,9 @@ export default registerAs('mailer', () => {
                 pass,
             },
             ignoreTLS: true,
-        }
+        },
+        // defaults: {
+        //     from:'"nest-modules" <modules@nestjs.com>',
+        // }
     };
 }); 
