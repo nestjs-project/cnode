@@ -54,7 +54,7 @@
     "loader-builder": "^2.7.0",
     "loader-connect": "^1.0.1",
     "mongoose": "^5.9.14",
-    "nodemailer": "^6.4.6",
+    "nodemailer": "^6.4.16",
     "nodemailer-smtp-transport": "^2.7.4",
     "passport": "^0.4.1",
     "passport-github": "^1.1.0",
